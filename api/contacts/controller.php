@@ -1,8 +1,28 @@
 <?php
 
   // Step 1: index action to retrieve all the contacts
+  function index () {
+    try {
+      $sql = "SELECT * FROM contacts";
+      $result = dbo()->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+      return response(200, $result);
+    } catch (Exception $error) {
+      return response(404, ["statusMessage" => "Issue retrieving results", "errors" => [$error->getMessage()]]);
+    }
+  }
 
   // Step 2: show action to retrieve a specific contact
+  function show ($id) {
+    $sql = "SELECT * FROM contacts WHERE id = :id";
+    $stmt = dbo()->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$result) $result = json_decode("{}");
+    return response(200, $result);
+  }
 
   // Step 3: search action to retrieve contacts by a term
 

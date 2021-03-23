@@ -53,6 +53,7 @@
     */
     try {
       $context = stream_context_create($options);
+
       $response = file_get_contents("{$base_endpoint}/contacts/{$action}", false, $context);
 
       // If we get a valid response we'll redirect so we can see the change.
